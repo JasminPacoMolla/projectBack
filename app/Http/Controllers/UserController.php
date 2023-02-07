@@ -52,7 +52,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('profile',compact('user'));
+//        return view('profile',compact('user'));
+        return response()->json();
     }
 
     /**
@@ -83,7 +84,7 @@ class UserController extends Controller
 
 
         if($validated->fails()){
-            return response("No se ha podido almacenar el usuario",Response::HTTP_BAD_REQUEST);
+            return response("It was an error while updating the user",Response::HTTP_BAD_REQUEST);
         }else {
             if($request->name)
                 $user->name = $request['name'];
@@ -105,7 +106,7 @@ class UserController extends Controller
 
             $response = [
                 "message" => 'User {{$user->name}} well updated',
-                "usuario" => $user
+                "user" => $user
             ];
 
             return response()->json($response);
@@ -124,8 +125,8 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $respuesta =[
-            "mensaje"=>"Usuario $user->id borrado correctamente",
-            "usuario"=>$user
+            "mensaje"=>"User $user->id well deleted",
+            "user"=>$user
         ];
         $user->delete();
         return response($respuesta);

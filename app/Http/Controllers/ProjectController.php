@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProjectController extends Controller
 {
@@ -32,10 +38,29 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+        public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required'
+        ]);
+
+        //$user=Auth::user();
+        $project= new Project();
+        $project->name=$request->name;
+        $project->user_id=Auth::user()->getAuthIdentifier();
+
+        $project->save();
+
+        $response = [
+            "message" => "Project well created!!",
+            "project"=>$project
+        ];
+        return response($response);
+
     }
+
+
 
     /**
      * Display the specified resource.
@@ -43,9 +68,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($project)
     {
-        //
+        return response(Project::with('user')->find($project->id));
+
     }
 
     /**
@@ -56,7 +82,8 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+
+
     }
 
     /**
@@ -66,9 +93,23 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $project)
     {
-        //
+        $validated = Validator::make([ 'name'=>'required']);
+        if($validated->fails()){
+            return response("It was an error while updating the project",Response::HTTP_BAD_REQUEST);
+        }else{
+            if($request->name)
+                $project->name = $request['name'];
+        }
+        $project->save();
+
+
+         $response=[
+            "message"=>"Project well updated",
+            "project"=>$project
+        ];
+        return response($response);
     }
 
     /**
@@ -77,8 +118,17 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($project)
     {
-        //
+        $response =[
+            "message"=>"User $project->id well deleted",
+            "project"=>$project
+        ];
+        $project->delete();
+        return response($response);
     }
+
+
+
+    /**/
 }
