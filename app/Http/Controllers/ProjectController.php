@@ -71,7 +71,7 @@ class ProjectController extends Controller
     public function show($project)
     {
 //        return response(Project::with('user')->find(3));
-        return response(Project::where ('id',$project->id)->with('user'),200);
+        return response(Project::where ('id','')->with('user'),200);
 
     }
 
