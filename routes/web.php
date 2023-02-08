@@ -33,12 +33,16 @@ Route::post('/signup',"App\Http\Controllers\RegisterController@store");
 
 /************************************************************************/
 Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
+Route::get('/user',"App\Http\Controllers\UserController@index");
+
 Route::put('/user/{user}', "App\Http\Controllers\UserController@update");
 Route::delete('/user/{user}', "App\Http\Controllers\UserController@destroy");
 
 /************************************************************************/
 
 Route::get('/project/{project}',"App\Http\Controllers\ProjectController@show");
+Route::get('/project',"App\Http\Controllers\ProjectController@index");
+
 Route::post('/project',"App\Http\Controllers\ProjectController@store");
 Route::put('/project/{project}', "App\Http\Controllers\ProjectController@update");
 Route::delete('/project/{project}', "App\Http\Controllers\ProjectController@destroy");

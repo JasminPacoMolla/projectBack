@@ -26,12 +26,16 @@ use Illuminate\Support\Facades\Route;
 //Route::post('/signup',"App\Http\Controllers\RegisterController@store");
 //
 //Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
+//Route::get('/user',"App\Http\Controllers\UserController@index");
+
 //Route::put('/user/{user}', "App\Http\Controllers\UserController@update");
 
 
 //Route::put('/fichero/{fichero}',[\App\Http\Controllers\FicheroController::class,'update']);
 Route::post('/project',"App\Http\Controllers\ProjectController@store");
+Route::get('/project/{project}',"App\Http\Controllers\ProjectController@show");
 
+Route::put('/project/{project}', "App\Http\Controllers\ProjectController@update");
 
 Route::middleware('auth:sanctum')->group(function(){
 

@@ -19,7 +19,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        return response(Project::all());
     }
 
     /**
@@ -70,7 +70,8 @@ class ProjectController extends Controller
      */
     public function show($project)
     {
-        return response(Project::with('user')->find($project->id));
+//        return response(Project::with('user')->find(3));
+        return response(Project::where ('id',$project->id)->with('user'),200);
 
     }
 
