@@ -16,9 +16,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        return response(User::all());
+        return response(User::with('projects')->get());
     }
 
     /**
@@ -53,7 +54,7 @@ class UserController extends Controller
     public function show(User $user)
     {
 //        return view('profile',compact('user'));
-        return response()->json();
+        return response($user);
     }
 
     /**
@@ -109,7 +110,7 @@ class UserController extends Controller
                 "user" => $user
             ];
 
-            return response()->json($response);
+            return response($response);
         }
       }
 

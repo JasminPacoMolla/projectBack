@@ -28,19 +28,40 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
 //Route::get('/user',"App\Http\Controllers\UserController@index");
 
-//Route::put('/user/{user}', "App\Http\Controllers\UserController@update");
 
 
-//Route::put('/fichero/{fichero}',[\App\Http\Controllers\FicheroController::class,'update']);
+//Route::put('/fichero/{fichero}',[\App\Http\Controllers\FileController::class,'update']);
 Route::post('/project',"App\Http\Controllers\ProjectController@store");
 Route::get('/project/{project}',"App\Http\Controllers\ProjectController@show");
+Route::get('/project/',"App\Http\Controllers\ProjectController@index");
 
 Route::put('/project/{project}', "App\Http\Controllers\ProjectController@update");
+Route::delete('/project/{project}', "App\Http\Controllers\ProjectController@destroy");
+
+
+Route::post('/login',"App\Http\Controllers\RegisterController@storeLogin");
+Route::post('/signup',"App\Http\Controllers\RegisterController@store");
+
+Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
+Route::get('/user',"App\Http\Controllers\UserController@index");
+Route::put('/user/{user}', "App\Http\Controllers\UserController@update");
+
+
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+   // Route::get('/login', function () {
+       // return response(["UserType"=>"admin", "IndexPage"=>"/admin"  ]);  });
+
+//    Route::get('/user',"App\Http\Controllers\UserController@index");
+
+});
+
 
 Route::middleware('auth:sanctum')->group(function(){
 
 
 //Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
+//Route::get('/user',"App\Http\Controllers\UserController@index");
+
 //Route::put('/user/{user}', "App\Http\Controllers\UserController@update");
 
 //Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
@@ -52,6 +73,6 @@ Route::middleware('auth:sanctum')->group(function(){
 //Route::delete('/project/{project}', "App\Http\Controllers\ProjectController@destroy");
 
 
-//Route::put('/fichero/{fichero}',[\App\Http\Controllers\FicheroController::class,'update']);
+//Route::put('/fichero/{fichero}',[\App\Http\Controllers\FileController::class,'update']);
 
 });

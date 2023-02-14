@@ -11,15 +11,16 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProjectController extends Controller
-{
+{//Seeder-tests-phpdocumentor;
     /**
+     *
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return response(Project::all());
+        return response(Project::with('files')->get());
     }
 
     /**
@@ -39,8 +40,7 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function store(Request $request)
-    {
+        public function store(Request $request){
         $request->validate([
             'name'=>'required'
         ]);
@@ -48,7 +48,7 @@ class ProjectController extends Controller
         //$user=Auth::user();
         $project= new Project();
         $project->name=$request->name;
-        $project->user_id=Auth::user()->getAuthIdentifier();
+        $project->user_id=$request->user_id;
 
         $project->save();
 
@@ -68,10 +68,19 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($project)
+    public function show(Request $request,$id_project)
     {
 //        return response(Project::with('user')->find(3));
-        return response(Project::where ('id','')->with('user'),200);
+        //return response();
+
+        $project = Project::find($id_project);
+
+        $response = [
+            "message"=>"Project Found!!",
+            "project"=>$project
+        ];
+       return response($response);
+
 
     }
 
@@ -94,9 +103,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $project)
+    public function update(Request $request, $id_project)
     {
-        $validated = Validator::make([ 'name'=>'required']);
+        $project = Project::find($id_project);
+        $validated = Validator::make([ 'name'=>'required'],[]);
         if($validated->fails()){
             return response("It was an error while updating the project",Response::HTTP_BAD_REQUEST);
         }else{
@@ -119,10 +129,11 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($project)
+    public function destroy($id_project)
     {
+        $project = Project::find($id_project);
         $response =[
-            "message"=>"User $project->id well deleted",
+            "message"=>"Project well deleted",
             "project"=>$project
         ];
         $project->delete();

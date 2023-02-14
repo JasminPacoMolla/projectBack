@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 
 class RegisterController extends Controller
@@ -39,17 +40,31 @@ class RegisterController extends Controller
     }
 
     public function storeLogin(Request $request){
-
         $credentials=[
             'email'=>$request['email'],
             'password'=>$request['password']
         ];
         if(!Auth::attempt($credentials)){
-            return back()->withErrors(['message'=>'Something is wrong.']);
-        }else{
-            return redirect('/');
-        }
+            return response()->json(['error'=>'Unauthorised'], 401);
+       }else{
+            $user = Auth::user();
+            $token= $user->createToken('token')->accessToken;
+            $path = $this->redirectTo();
+           return response(["user"=>$user,"path"=>$path]);
+       }
 
+    }
+    protected function redirectTo()
+    {
+        $user =  Auth::user();
+        $path1 = ["path"=>"/admin"];
+        $path2=["path"=>"/"];
+        if ($user->user_type == 'admin')
+        {
+            return $path1;  // admin dashboard path
+        } else {
+            return $path2;  // member dashboard path
+        }
     }
 
     /**
@@ -59,12 +74,13 @@ class RegisterController extends Controller
      * @return \Illuminate\Http\Response
      */
     /*request:all().*/
-    public function store(Request $request)/*Sign up*/
+    public function store(Request $request)
     {
         $request->validate([
             'name'=>'required',
             'email'=>'required|email|unique:users',
-            'password'=>'required|min:8|confirmed',
+            'password'=>'required|min:6|confirmed',
+           // 'api_token' => Str::random(60),
             'termsAcceptation'=>'required'
         ]);
 
@@ -77,8 +93,8 @@ class RegisterController extends Controller
         $user->save();
 
         auth()->login($user,true);
-
-        return redirect('/');
+        $response = ["message"=>"User well created!!", "User"=>$user ];
+        return response($response);
 
     }
 
@@ -124,7 +140,12 @@ class RegisterController extends Controller
      */
 
     public function destroyLogin(){
+        $user = Auth::user();
+        $user->tokens->each(function($token, $key) {
+            $token->delete();
+        });
         Auth::logout();
-        return redirect('/');
+        $response = ["message"=>"Successfully logged out","Usuario"=>$user];
+        return response($response,200);
     }
 }
