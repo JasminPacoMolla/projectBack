@@ -78,11 +78,10 @@ class UserController extends Controller
 
       public function update(Request $request, User $user) {
 
-        $validated = Validator::make([ 'telefono'=>'digits|maxDigits:9'],
+        $validated = Validator::make([ 'telefono'=>'digits|maxDigits:12'],
             ['email'=>'email|unique:users'],
             ['password'=>'min:8']
         );
-
 
         if($validated->fails()){
             return response("It was an error while updating the user",Response::HTTP_BAD_REQUEST);
@@ -93,8 +92,6 @@ class UserController extends Controller
                 $user->email = $request['email'];
             if($request->password)
                 $user->password = $request['password'];
-           if($request->telefono)
-                $user->telefono = $request['telefono'];
            if($request->phoneNumber)
                 $user->phoneNumber = $request['phoneNumber'];
            if($request->photo)
@@ -103,6 +100,8 @@ class UserController extends Controller
                 $user->address = $request['address'];
            if($request->country)
                 $user->country = $request['country'];
+            if($request->user_type)
+                $user->user_type = $request['user_type'];
             $user->save();
 
             $response = [

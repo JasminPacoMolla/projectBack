@@ -48,16 +48,16 @@ class RegisterController extends Controller
             return response()->json(['error'=>'Unauthorised'], 401);
        }else{
             $user = Auth::user();
-            $token= $user->createToken('token')->accessToken;
+            $token= $user->createToken('token');
             $path = $this->redirectTo();
-           return response(["user"=>$user,"path"=>$path]);
+           return response(["user"=>$user,"token"=>$token,"path"=>$path],200);
        }
 
     }
     protected function redirectTo()
     {
         $user =  Auth::user();
-        $path1 = ["path"=>"/admin"];
+        $path1 = ["path"=>"/IndexAdmin"];
         $path2=["path"=>"/"];
         if ($user->user_type == 'admin')
         {
@@ -94,7 +94,7 @@ class RegisterController extends Controller
 
         auth()->login($user,true);
         $response = ["message"=>"User well created!!", "User"=>$user ];
-        return response($response);
+        return response($response,200);
 
     }
 

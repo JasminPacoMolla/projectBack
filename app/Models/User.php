@@ -24,8 +24,7 @@ class User extends Authenticatable
         'photo',
         'address',
         'country',
-        'userType',
-        'remember_me',
+        'user_type',
         'password',
     ];
 
