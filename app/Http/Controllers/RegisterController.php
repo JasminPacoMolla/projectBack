@@ -141,9 +141,7 @@ class RegisterController extends Controller
 
     public function destroyLogin(){
         $user = Auth::user();
-        $user->tokens->each(function($token, $key) {
-            $token->delete();
-        });
+
         Auth::logout();
         $response = ["message"=>"Successfully logged out","Usuario"=>$user];
         return response($response,200);

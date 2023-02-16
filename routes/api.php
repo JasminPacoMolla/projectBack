@@ -31,6 +31,17 @@ use Illuminate\Support\Facades\Route;
 
 
 //Route::put('/fichero/{fichero}',[\App\Http\Controllers\FileController::class,'update']);
+Route::post('/file',"App\Http\Controllers\FileController@store");
+Route::get('/file/{file}',"App\Http\Controllers\FileController@show");
+Route::get('/file/',"App\Http\Controllers\FileController@index");
+
+Route::put('/file/{file}', "App\Http\Controllers\FileController@update");
+Route::delete('/file/{file}', "App\Http\Controllers\FileController@destroy");
+
+
+
+
+
 Route::post('/project',"App\Http\Controllers\ProjectController@store");
 Route::get('/project/{project}',"App\Http\Controllers\ProjectController@show");
 Route::get('/project/',"App\Http\Controllers\ProjectController@index");
@@ -41,11 +52,15 @@ Route::delete('/project/{project}', "App\Http\Controllers\ProjectController@dest
 
 Route::post('/login',"App\Http\Controllers\RegisterController@storeLogin");
 Route::post('/signup',"App\Http\Controllers\RegisterController@store");
+Route::post('/logout',"App\Http\Controllers\RegisterController@destroyLogin");
+
 
 Route::get('/user/{user}',"App\Http\Controllers\UserController@show");
-Route::get('/user',"App\Http\Controllers\UserController@index");
 Route::put('/user/{user}', "App\Http\Controllers\UserController@update");
 
+Route::get('/user',"App\Http\Controllers\UserController@index");
+
+Route::delete('/user/{user}', "App\Http\Controllers\UserController@destroy");
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
    // Route::get('/login', function () {

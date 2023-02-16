@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,7 +92,7 @@ class UserController extends Controller
             if($request->email)
                 $user->email = $request['email'];
             if($request->password)
-                $user->password = $request['password'];
+                $user->password = Hash::make($request['password']);
            if($request->phoneNumber)
                 $user->phoneNumber = $request['phoneNumber'];
            if($request->photo)
@@ -124,11 +125,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $respuesta =[
-            "mensaje"=>"User $user->id well deleted",
-            "user"=>$user
-        ];
         $user->delete();
+        $respuesta =[
+            "message"=>"User well deleted"
+        ];
         return response($respuesta);
     }
 }
