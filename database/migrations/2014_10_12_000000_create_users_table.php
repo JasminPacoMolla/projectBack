@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('phoneNumber')->nullable();;
             $table->string('address')->nullable();;
             $table->string('country')->nullable();;
-            $table->string('userType')->default('no premium');
-            $table->string('termsAcceptation');
+            $table->string('user_type')->default('no premium');
+            $table->string('termsAcceptation')->default("off");
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

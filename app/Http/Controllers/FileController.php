@@ -28,10 +28,9 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-       /* $request->validate([
-            'name'=>'required | unique'
-
-        ]);*/
+        $request->validate([
+            'name'=>'required'
+        ],[]);
 
         //$user=Auth::user();
         $file= new File();
@@ -72,24 +71,25 @@ class FileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, File $id_file)
+    public function update(Request $request, File $file)
     {
-       /* $file->contenido = $request['contenido'];
-        $file->save();
-          return response($request);*/
-
-        $file = Project::find($id_file);
         $validated = Validator::make([ 'name'=>'required | unique'],[]);
         if($validated->fails()){
             return response("It was an error while updating the file",Response::HTTP_BAD_REQUEST);
         }else{
-            if($request->name)
-                $file->name = $request['name'];
-            if($request['content'])
-                $file->content = $request['content'];
+            if($request->name){
+                $file->name = $request['name'];}
+            if($request['content']){
+                $file->content = $request['content'];}
+            var_dump($request->name);
+        }
+        $file->save();
+        $response=[
+            "message"=>"File well updated",
+            "file"=>$file
+        ];
+        return response($response);
 
- }
- $file->save();
 
 }
 
