@@ -13,11 +13,22 @@ class FileController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(File::all());
+        $projectId = $request->query('project_id');
+
+        $project = Project::find($projectId);
+
+        if (!$project) {
+            return response()->json(['error' => 'Project not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $files = $project->files;
+
+        return response()->json($files);
+
     }
 
     /**
@@ -81,7 +92,6 @@ class FileController extends Controller
                 $file->name = $request['name'];}
             if($request['content']){
                 $file->content = $request['content'];}
-            var_dump($request->name);
         }
         $file->save();
         $response=[
@@ -89,8 +99,6 @@ class FileController extends Controller
             "file"=>$file
         ];
         return response($response);
-
-
 }
 
 /**

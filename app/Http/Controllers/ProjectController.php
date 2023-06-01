@@ -8,19 +8,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProjectController extends Controller
-{//Seeder-tests-phpdocumentor;
+
+{
+    protected $user;
+    //Seeder-tests-phpdocumentor;
     /**
      *
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
+    }
     public function index()
     {
-        return response(Project::with('files')->get());
+        //return response(Project::with('files')->get());
+
+        $listProjects = \auth()->user()->projects()->get();
+        return response(['listProjects'=>$listProjects],200);
     }
 
     /**
@@ -44,18 +58,15 @@ class ProjectController extends Controller
         $request->validate([
             'name'=>'required'
         ]);
-
-        //$user=Auth::user();
         $project= new Project();
         $project->name=$request->name;
-        $project->user_id=$request->user_id;
-
-        $project->save();
-
-        $response = [
-            "message" => "Project well created!!",
-            "project"=>$project
-        ];
+        $project->user_id=Auth::id();
+            $project->save();
+            $response = [
+                "message" => "Project well created!!",
+                "project"=>$project,
+                "user"=>Auth::user()
+            ];
         return response($response);
 
     }

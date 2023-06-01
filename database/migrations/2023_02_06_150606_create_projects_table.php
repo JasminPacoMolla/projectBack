@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->string("name")->unique();
+            $table->string("name");
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unique(['name', 'user_id']);
+
             $table->timestamps();
         });
     }

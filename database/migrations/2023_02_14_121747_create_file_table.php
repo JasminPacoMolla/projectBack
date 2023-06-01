@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->text('content')->nullable();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->unique(['name', 'project_id']);
             $table->timestamps();
         });
     }
